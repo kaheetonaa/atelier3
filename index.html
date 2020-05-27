@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<body>
+<div class="wrapper">
+      <div id="title"></div>
+      <div id="map"></div>
+      <div id="map_data"></div>
+      <div id="L"></div>
+      <div id="css"></div>
+      <div id="d3"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import {Runtime} from "https://unpkg.com/@observablehq/runtime@4/dist/runtime.js";
+      import notebook from "https://api.observablehq.com/@kuquanghuylcb/tong-hop-atelier-3.js?v=3";
+      const renders = {
+        "title":"#title",
+        "map":"#map",
+        "map_data": "#map_data",
+        "L":"#leaflet",
+        "css":"#css",
+        "d3":"#d3"
+      };
+      function render(_node, value) {
+        if (!(value instanceof Element)) {
+          const el = document.createElement("span");
+          el.innerHTML = value;
+          value = el;
+        }
+        if (_node.firstChild !== value) {
+          if (_node.firstChild) {
+            while (_node.lastChild !== _node.firstChild) _node.removeChild(_node.lastChild);
+            _node.replaceChild(value, _node.firstChild);
+          } else {
+            _node.appendChild(value);
+          }
+        }
+      }
+      const runtime = new Runtime();
+      const main = runtime.module(notebook, name => {
+        const selector = renders[name];
+        if (selector) {
+          return {fulfilled: (value) => render(document.querySelector(selector), value)}
+        } else {
+          return true;
+        }
+      });
+    </script>
+  </body>
+</html>
